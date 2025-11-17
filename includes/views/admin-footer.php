@@ -10,5 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
+			</div><!-- .card -->
+		</div><!-- .col-12 -->
 	</div><!-- .row -->
 </div><!-- .wrap -->

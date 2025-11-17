@@ -10,10 +10,6 @@
 */
 
 /* Remove a largura máxima do contêiner principal do WordPress em nossas páginas. */
-.wrap.patropi-bjo-admin-page{
-	max-width: 90% !important;
+.wrap.patropi-bjo-admin-page .card {
+	max-width: none !important;
 }
-
-.card {
-	max-width: 100% !important;
-} 
