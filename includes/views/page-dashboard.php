@@ -38,7 +38,59 @@ if ( $n8n_table_exists === $n8n_log_table_name ) {
 	<p class="lead">Bem-vindo ao painel de controle do plugin de funcionalidades da Patropi Comunica. Use a navegação acima para acessar as diferentes seções.</p>
 </div>
 
-<div class="col-9">
+<div class="col-lg-6 mb-4">
+	<div class="card h-100">
+		<div class="card-body">
+			<h2 class="card-title h4">Status do Sistema</h2>
+			<p class="lead mb-3">Verificação das estruturas essenciais para o funcionamento do portal.</p>
+			<table class="table table-hover">
+				<thead class="table-light">
+					<tr>
+						<th>Estrutura</th>
+						<th class="text-end">Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Taxonomia 'autor'</td>
+						<td class="text-end"><?php echo patropi_bjo_is_taxonomy_active( 'autor' ) ? '<span class="badge bg-success">Ativa</span>' : '<span class="badge bg-danger">Inativa</span>'; ?></td>
+					</tr>
+					<tr>
+						<td>Taxonomia 'journal'</td>
+						<td class="text-end"><?php echo patropi_bjo_is_taxonomy_active( 'journal' ) ? '<span class="badge bg-success">Ativa</span>' : '<span class="badge bg-danger">Inativa</span>'; ?></td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="mt-3 text-center border-top pt-3">
+				<p class="mb-2">Se alguma estrutura estiver inativa, importe o arquivo de configuração do ACF.</p>
+				<a href="<?php echo esc_url( plugins_url( 'bjo-plugin/download/acf-import.json' ) ); ?>" class="btn btn-outline-primary" download>
+					Baixar Arquivo JSON
+				</a>
+			</div>
+
+			<div class="mt-4 border-top pt-3">
+				<h3 class="h5">Funcionalidades do WordPress</h3>
+				<table class="table table-hover">
+					<thead class="table-light">
+						<tr>
+							<th>Funcionalidade</th>
+							<th class="text-center">Status</th>
+							<th class="text-end">Ações</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Cadastro de novos membros</td>
+							<td class="text-center"><?php echo get_option( 'users_can_register' ) ? '<span class="badge bg-success">Habilitado</span>' : '<span class="badge bg-danger">Desabilitado</span>'; ?></td>
+							<td class="text-end"><a href="<?php echo esc_url( admin_url( 'options-general.php' ) ); ?>" class="btn btn-sm btn-outline-secondary">Gerenciar</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="col-lg-6 mb-4">
 	<div class="card">
 		<div class="card-body">
 			<h2 class="card-title h4">Bases de Dados</h2>

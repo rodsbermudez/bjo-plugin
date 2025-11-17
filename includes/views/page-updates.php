@@ -51,6 +51,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<table class="table table-hover mb-0">
 				<tbody>
 					<tr>
+						<td style="width: 15%;"><strong>0.0.6</strong></td>
+						<td>Adiciona um painel de 'Status do Sistema' no dashboard para verificar a ativação de taxonomias e configurações do WordPress. Inclui um botão para download do arquivo de importação do ACF.</td>
+					</tr>
+					<tr>
 						<td style="width: 15%;"><strong>0.0.5</strong></td>
 						<td>Adiciona a funcionalidade de importador de artigos (XML e PDF) com envio para o webhook do N8N e opção de ambiente de teste/produção.</td>
 					</tr>
