@@ -15,7 +15,10 @@ $current_page_slug = isset( $_GET['page'] ) ? sanitize_key( $_GET['page'] ) : ''
 ?>
 
 <div class="wrap patropi-bjo-admin-page container-fluid py-4">
-	<h1 class="mb-4">Patropi Comunica</h1>
+	<div class="mb-4">
+		<img src="<?php echo esc_url( plugins_url( 'bjo-plugin/assets/images/patropi-logo.png' ) ); ?>" alt="Logo Patropi Comunica" style="max-width: 250px; height: auto;">
+	</div>
+
 	<div class="btn-group mb-4" role="group" aria-label="Navegação principal do plugin">
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=patropi-bjo-dashboard' ) ); ?>" class="btn <?php echo ( 'patropi-bjo-dashboard' === $current_page_slug ) ? 'btn-primary' : 'btn-outline-primary'; ?>">
 			Dashboard

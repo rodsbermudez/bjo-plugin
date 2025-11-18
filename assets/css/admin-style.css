@@ -17,3 +17,12 @@
 .card {
 	max-width: 100% !important;
 } 
+
+/**
+ * Estilos customizados para o painel de administração do plugin BJO.
+ */
+
+/* Remove o padding do ícone customizado no menu principal */
+#toplevel_page_patropi-bjo-dashboard .wp-menu-image img {
+	padding: 0;
+}

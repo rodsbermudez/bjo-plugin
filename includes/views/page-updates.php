@@ -37,6 +37,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<td><strong>Importador de Artigos</strong></td>
 						<td>Adiciona um formulário para upload de arquivos XML e PDF, processa os arquivos e os envia para o N8N para criação de posts.</td>
 					</tr>
+					<tr>
+						<td><strong>Busca de Citações</strong></td>
+						<td>Integração com a API da <a href="https://www.semanticscholar.org/" target="_blank">semanticscholar.org</a> (via N8N) para encontrar e exibir artigos que citam os posts do site através do shortcode <code>[enviar_referencias_n8n]</code>.</td>
+					</tr>
+					<tr>
+						<td><strong>Shortcodes Dinâmicos</strong></td>
+						<td>Ferramentas como <code>[listar_termos]</code> para exibir listas de taxonomias de forma flexível no front-end.</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
@@ -50,6 +58,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<p class="lead mb-3">Acompanhe as novidades e correções de cada versão.</p>
 			<table class="table table-hover mb-0">
 				<tbody>
+					<tr>
+						<td style="width: 15%;"><strong>0.0.7</strong></td>
+						<td>Adiciona shortcode para busca de citações no Semantic Scholar via N8N e shortcode para listagem de termos de taxonomias.</td>
+					</tr>
 					<tr>
 						<td style="width: 15%;"><strong>0.0.6</strong></td>
 						<td>Adiciona um painel de 'Status do Sistema' no dashboard para verificar a ativação de taxonomias e configurações do WordPress. Inclui um botão para download do arquivo de importação do ACF.</td>

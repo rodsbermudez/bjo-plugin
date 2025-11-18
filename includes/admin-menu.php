@@ -18,13 +18,16 @@ function patropi_bjo_admin_menu() {
 	 * Cria o item de menu principal (de nível superior).
 	 * @see https://developer.wordpress.org/reference/functions/add_menu_page/
 	 */
+	// Gera a URL para o ícone customizado.
+	$icon_url = plugin_dir_url( __DIR__ ) . 'assets/images/patropi-favicon.png';
+
 	add_menu_page(
 		'Patropi Comunica - Dashboard',    // 1. Título da página (o que aparece na tag <title> do navegador).
 		'Patropi Comunica',                // 2. Título do menu (o que aparece na barra lateral do admin).
 		'manage_options',                  // 3. Capacidade: quem pode ver este menu (apenas administradores).
 		'patropi-bjo-dashboard',           // 4. Slug do menu: um identificador único para este menu.
 		'patropi_bjo_dashboard_page_html', // 5. Função de callback para a página principal.
-		'dashicons-building',              // 6. Ícone: o ícone que aparece ao lado do título do menu.
+		$icon_url,                         // 6. Ícone: o ícone que aparece ao lado do título do menu.
 		2                                  // 7. Posição: onde o menu aparece na barra lateral (números menores ficam mais acima).
 	);
 

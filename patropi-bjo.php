@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       Brazillian Journal | Funcionalidades
  * Plugin URI:        https://patropicomunica.com.br
- * Description:       Funcionalidades para o portal de artigos funcionar. 
- * Version:           0.0.6
+ * Description:       Funcionalidades para o portal de artigos funcionar.
+ * Version:           0.0.7
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Rodrigo Mermudez | Patropi Comunica
@@ -65,6 +65,7 @@ function patropi_bjo_check_dependencies() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/admin-menu.php';
 	require_once plugin_dir_path( __FILE__ ) . 'includes/importer.php';
 	require_once plugin_dir_path( __FILE__ ) . 'includes/assets.php';
+	require_once plugin_dir_path( __FILE__ ) . 'includes/taxonomias.php';
 }
 add_action( 'plugins_loaded', 'patropi_bjo_check_dependencies' );
 
