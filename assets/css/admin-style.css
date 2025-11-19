@@ -26,3 +26,7 @@
 #toplevel_page_patropi-bjo-dashboard .wp-menu-image img {
 	padding: 0;
 }
+
+#wpfooter{
+	bottom:unset !important;
+}

@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       Brazillian Journal | Funcionalidades
  * Plugin URI:        https://patropicomunica.com.br
- * Description:       Funcionalidades para o portal de artigos funcionar. 
- * Version:           0.0.8
+ * Description:       Funcionalidades para o portal de artigos funcionar.
+ * Version:           0.0.9
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Rodrigo Bermudez | Patropi Comunica
@@ -42,6 +42,7 @@ if ( ! function_exists( 'patropi_bjo_get_n8n_config' ) ) {
 // estarão disponíveis para os hooks do WordPress.
 require_once plugin_dir_path( __FILE__ ) . 'includes/visitor-tracking.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/n8n-integration.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/article-views-tracking.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin-menu.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/importer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/assets.php';
@@ -56,6 +57,7 @@ function patropi_bjo_activate_plugin() {
 
 	patropi_bjo_create_visitor_table();
 	patropi_bjo_create_n8n_log_table();
+	patropi_bjo_create_article_views_table();
 }
 register_activation_hook( __FILE__, 'patropi_bjo_activate_plugin' );
 

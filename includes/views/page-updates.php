@@ -36,6 +36,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<td><strong>Gerenciamento de Ambiente</strong></td>
 						<td>Permite alternar entre os ambientes de 'Produção' e 'Teste' para as integrações com o N8N. Inclui um monitor de status dos workflows no dashboard.</td>
 					</tr>
+					<tr>
+						<td><strong>Contador de Acessos</strong></td>
+						<td>Registra as visualizações de cada artigo, salvando o IP, ID do usuário (se logado) e a data do acesso.</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
@@ -49,6 +53,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<p class="lead mb-3">Acompanhe as novidades e correções de cada versão.</p>
 			<table class="table table-hover mb-0">
 				<tbody>
+					<tr>
+						<td style="width: 15%;"><strong>0.0.9</strong></td>
+						<td>Adiciona um sistema de rastreamento de visualizações para os artigos, com uma nova tabela no banco de dados e exibição no dashboard.</td>
+					</tr>
 					<tr>
 						<td style="width: 15%;"><strong>0.0.8</strong></td>
 						<td>Adiciona um seletor de ambiente (Produção/Teste) para as integrações com o N8N e um painel de status dos workflows no dashboard. Centraliza as chaves de API e URLs em um arquivo de configuração.</td>
@@ -88,4 +96,3 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <?php require_once __DIR__ . '/admin-footer.php'; ?>
-
