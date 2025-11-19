@@ -116,7 +116,7 @@ function patropi_bjo_send_references_shortcode() {
 
 	// 2. Obtém o ID do post e o valor do campo 'referencias_do_artigo'.
 	$post_id           = get_the_ID();
-	$artigo_doi = get_field( 'artigo_doi', $post_id );
+	$artigo_doi = get_field( 'artigo_doi', $post_id ); 
 
 
 	// 3. Se o campo de referências estiver vazio, retorna uma mensagem informativa.
@@ -125,8 +125,18 @@ function patropi_bjo_send_references_shortcode() {
 	}
 
 	// 4. Prepara os dados para o envio.
-	$webhook_url = 'https://n8n-service-qz5q.onrender.com/webhook-test/get-citacoes';
-	$api_key     = 'MinhaChaveSecretaParaXML2024';
+	$webhook_url = '';
+	$api_key     = '';
+	// Pega o ambiente global salvo no banco de dados (padrão: 'production').
+	$current_env = get_option( 'patropi_bjo_n8n_environment', 'production' );
+
+	if ( function_exists( 'patropi_bjo_get_n8n_config' ) ) {
+		$n8n_config = patropi_bjo_get_n8n_config();
+
+		// Pega a URL e a chave de API do arquivo de configuração.
+		$webhook_url = $n8n_config['webhooks']['citations'][ $current_env ] ?? '';
+		$api_key     = $n8n_config['api_key'] ?? '';
+	} 
  
 	$data = array(
 		'post_id'             => $post_id,
@@ -151,6 +161,7 @@ function patropi_bjo_send_references_shortcode() {
 		$error_message = '<p class="patropi-n8n-notice notice-error">Ocorreu um erro de conexão ao tentar enviar as referências. Tente novamente mais tarde.</p>';
 		if ( current_user_can( 'manage_options' ) ) {
 			$error_message .= '<p class="patropi-n8n-debug-info"><strong>Erro (admin):</strong> ' . esc_html( $error_string ) . '</p>';
+			$error_message .= '<p class="patropi-n8n-debug-info"><strong>URL Tentada (admin):</strong> <code>' . esc_html( $webhook_url ) . '</code></p>';
 		}
 		return $error_message;
 	}

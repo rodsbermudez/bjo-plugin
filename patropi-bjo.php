@@ -2,11 +2,11 @@
 /**
  * Plugin Name:       Brazillian Journal | Funcionalidades
  * Plugin URI:        https://patropicomunica.com.br
- * Description:       Funcionalidades para o portal de artigos funcionar.
- * Version:           0.0.7
+ * Description:       Funcionalidades para o portal de artigos funcionar. 
+ * Version:           0.0.8
  * Requires at least: 5.2
  * Requires PHP:      7.2
- * Author:            Rodrigo Mermudez | Patropi Comunica
+ * Author:            Rodrigo Bermudez | Patropi Comunica
  * Author URI:        https://patropicomunica.com.br
  * Text Domain:       patropi-bjo
  * Domain Path:       /languages
@@ -17,6 +17,35 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 } 
 
+// A função de configuração precisa ser definida aqui para estar disponível globalmente.
+if ( ! function_exists( 'patropi_bjo_get_n8n_config' ) ) {
+	/**
+	 * Carrega e retorna as configurações de integração do N8N.
+	 *
+	 * @return array As configurações do arquivo n8n.config.php.
+	 */
+	function patropi_bjo_get_n8n_config() {
+		$config_file = plugin_dir_path( __FILE__ ) . 'includes/n8n.config.php';
+		if ( ! file_exists( $config_file ) ) {
+			return array(
+				'api_key'  => '',
+				'webhooks' => [],
+			);
+		}
+
+		return include $config_file;
+	}
+} 
+
+// Carrega todos os arquivos de funcionalidades do plugin.
+// Fazer isso no escopo global garante que todas as funções e classes
+// estarão disponíveis para os hooks do WordPress.
+require_once plugin_dir_path( __FILE__ ) . 'includes/visitor-tracking.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/n8n-integration.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin-menu.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/importer.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/assets.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/taxonomias.php';
 
 /**
  * Função principal executada na ativação do plugin.
@@ -24,8 +53,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function patropi_bjo_activate_plugin() {
 	// Carrega os arquivos necessários para a ativação, garantindo que as funções existam.
-	require_once plugin_dir_path( __FILE__ ) . 'includes/visitor-tracking.php';
-	require_once plugin_dir_path( __FILE__ ) . 'includes/n8n-integration.php';
 
 	patropi_bjo_create_visitor_table();
 	patropi_bjo_create_n8n_log_table();
@@ -59,13 +86,6 @@ function patropi_bjo_check_dependencies() {
 		return; // Interrompe a execução se a dependência não for atendida.
 	}
 
-	// Se as dependências estiverem OK, carrega o restante dos arquivos.
-	require_once plugin_dir_path( __FILE__ ) . 'includes/visitor-tracking.php';
-	require_once plugin_dir_path( __FILE__ ) . 'includes/n8n-integration.php';
-	require_once plugin_dir_path( __FILE__ ) . 'includes/admin-menu.php';
-	require_once plugin_dir_path( __FILE__ ) . 'includes/importer.php';
-	require_once plugin_dir_path( __FILE__ ) . 'includes/assets.php';
-	require_once plugin_dir_path( __FILE__ ) . 'includes/taxonomias.php';
 }
 add_action( 'plugins_loaded', 'patropi_bjo_check_dependencies' );
 
@@ -190,3 +210,54 @@ function meu_tema_redirecionar_pagina_login() {
     }
 }
 add_action( 'init', 'meu_tema_redirecionar_pagina_login' );	
+
+/**
+ * Processa a submissão do formulário para salvar o ambiente do N8N.
+ */
+function patropi_bjo_handle_save_n8n_environment() {
+	// 1. Verificações de segurança.
+	if ( ! isset( $_POST['patropi_bjo_n8n_env_nonce'] ) || ! wp_verify_nonce( $_POST['patropi_bjo_n8n_env_nonce'], 'patropi_bjo_save_n8n_env' ) ) {
+		wp_die( 'Falha na verificação de segurança.' );
+	}
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( 'Você não tem permissão para realizar esta ação.' );
+	}
+
+	// 2. Salva a opção no banco de dados.
+	$environment = isset( $_POST['n8n_global_environment'] ) && 'test' === $_POST['n8n_global_environment'] ? 'test' : 'production';
+	update_option( 'patropi_bjo_n8n_environment', $environment );
+
+	wp_safe_redirect( admin_url( 'admin.php?page=patropi-bjo-imports&settings-saved=true' ) );
+	exit;
+}
+add_action( 'admin_post_patropi_bjo_save_n8n_environment', 'patropi_bjo_handle_save_n8n_environment' );
+
+/**
+ * Verifica o status de um webhook fazendo uma requisição GET.
+ *
+ * @param string $url     A URL do webhook a ser verificada.
+ * @param string $api_key A chave de API para autenticação.
+ * @return bool True se o status for 200 ou 400 (indicando que o endpoint está ativo), false caso contrário.
+ */
+function patropi_bjo_check_webhook_status( $url, $api_key ) { 
+	if ( empty( $url ) ) {
+		return false; 
+	}
+
+	// Usa um timeout curto para não atrasar o carregamento da página.
+	// Usamos uma requisição POST sem corpo para verificar se o endpoint está ativo.
+	$args = array(
+		'timeout' => 5,
+		'headers' => array( 'X-API-KEY' => $api_key ),
+	);
+	$response = wp_remote_post( $url, $args );
+
+	if ( is_wp_error( $response ) ) {
+		return false;
+	}
+
+	$http_code = wp_remote_retrieve_response_code( $response );
+
+	// Para um POST de verificação, um código 200 indica que o endpoint está ativo e acessível.
+	return ( 200 === $http_code );
+}

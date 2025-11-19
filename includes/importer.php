@@ -149,17 +149,15 @@ function patropi_bjo_handle_upload() {
 	}
 
 	// 6. Envia o XML para o N8N.
-	$n8n_environment = isset( $_POST['n8n_environment'] ) ? sanitize_key( $_POST['n8n_environment'] ) : 'production';
+	$n8n_config = patropi_bjo_get_n8n_config();
+	$current_env = get_option( 'patropi_bjo_n8n_environment', 'production' );
 
-	if ( 'test' === $n8n_environment ) {
-		$n8n_webhook_url = 'https://n8n-service-qz5q.onrender.com/webhook-test/xml-load';
-	} else {
-		$n8n_webhook_url = 'https://n8n-service-qz5q.onrender.com/webhook/xml-load';
-	}
+	// Pega a URL correta do arquivo de configuração.
+	$webhook_url = $n8n_config['webhooks']['xml_import'][ $current_env ] ?? '';
+	// Pega a chave de API centralizada.
+	$api_key = $n8n_config['api_key'] ?? '';
 
-	$n8n_api_key = 'MinhaChaveSecretaParaXML2024'; // Idealmente, isso viria de uma opção do WordPress.
-
-	$webhook = new Patropi_BJO_N8N_Webhook( $n8n_webhook_url, $n8n_api_key );
+	$webhook = new Patropi_BJO_N8N_Webhook( $webhook_url, $api_key );
 	$result  = $webhook->send_xml( $xml_content );
 
 	patropi_bjo_set_admin_notice( $result['message'], $result['status'] ? 'success' : 'error' );

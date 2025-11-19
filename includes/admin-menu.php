@@ -46,18 +46,6 @@ function patropi_bjo_admin_menu() {
 	);
 
 	/**
-	 * Cria o submenu "Atualizações".
-	 */
-	add_submenu_page(
-		'patropi-bjo-dashboard',           // 1. Slug do menu pai.
-		'Atualizações',                    // 2. Título da página.
-		'Atualizações',                    // 3. Título do submenu (o que aparece na lista).
-		'manage_options',                  // 4. Capacidade.
-		'patropi-bjo-updates',             // 5. Slug do submenu.
-		'patropi_bjo_updates_page_html'    // 6. Função de callback: a função que gera o HTML desta página.
-	);
-
-	/**
 	 * Cria o submenu "Importações".
 	 */
 	add_submenu_page(
@@ -67,6 +55,18 @@ function patropi_bjo_admin_menu() {
 		'manage_options',                  // 4. Capacidade.
 		'patropi-bjo-imports',             // 5. Slug do submenu.
 		'patropi_bjo_imports_page_html'    // 6. Função de callback.
+	);
+
+	/**
+	 * Cria o submenu "Atualizações".
+	 */
+	add_submenu_page(
+		'patropi-bjo-dashboard',           // 1. Slug do menu pai.
+		'Atualizações',                    // 2. Título da página.
+		'Atualizações',                    // 3. Título do submenu (o que aparece na lista).
+		'manage_options',                  // 4. Capacidade.
+		'patropi-bjo-updates',             // 5. Slug do submenu.
+		'patropi_bjo_updates_page_html'    // 6. Função de callback: a função que gera o HTML desta página.
 	);
 
 	/**

@@ -87,6 +87,45 @@ if ( $n8n_table_exists === $n8n_log_table_name ) {
 					</tbody>
 				</table>
 			</div>
+
+			<?php
+			// Pega as configurações e URLs de produção para verificação.
+			$n8n_config         = patropi_bjo_get_n8n_config();
+			$current_env        = get_option( 'patropi_bjo_n8n_environment', 'production' );
+			$citations_prod_url = $n8n_config['webhooks']['citations']['production'] ?? '';
+			$import_prod_url    = $n8n_config['webhooks']['xml_import']['production'] ?? '';
+			$api_key            = $n8n_config['api_key'] ?? '';
+
+			// Verifica o status dos webhooks de produção.
+			$citations_status = patropi_bjo_check_webhook_status( $citations_prod_url, $api_key );
+			$import_status    = patropi_bjo_check_webhook_status( $import_prod_url, $api_key );
+			?>
+			<div class="mt-4 border-top pt-3">
+				<h3 class="h5">Workflow N8N</h3>
+				<table class="table table-hover mb-0">
+					<thead class="table-light">
+						<tr>
+							<th>Funcionalidade</th>
+							<th class="text-end">Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Ambiente Global</td>
+							<td class="text-end"><span class="badge bg-<?php echo 'production' === $current_env ? 'success' : 'warning'; ?>"><?php echo esc_html( ucfirst( $current_env ) ); ?></span></td>
+						</tr>
+						<tr>
+							<td>Workflow de Importação</td>
+							<td class="text-end"><span class="badge bg-<?php echo $import_status ? 'success' : 'danger'; ?>"><?php echo $import_status ? 'Ativo' : 'Inativo'; ?></span></td>
+						</tr>
+						<tr>
+							<td>Workflow de Citações</td>
+							<td class="text-end"><span class="badge bg-<?php echo $citations_status ? 'success' : 'danger'; ?>"><?php echo $citations_status ? 'Ativo' : 'Inativo'; ?></span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+            
 		</div>
 	</div>
 </div>

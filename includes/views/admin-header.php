@@ -23,11 +23,11 @@ $current_page_slug = isset( $_GET['page'] ) ? sanitize_key( $_GET['page'] ) : ''
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=patropi-bjo-dashboard' ) ); ?>" class="btn <?php echo ( 'patropi-bjo-dashboard' === $current_page_slug ) ? 'btn-primary' : 'btn-outline-primary'; ?>">
 			Dashboard
 		</a>
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=patropi-bjo-updates' ) ); ?>" class="btn <?php echo ( 'patropi-bjo-updates' === $current_page_slug || ! isset( $_GET['page'] ) ) ? 'btn-primary' : 'btn-outline-primary'; ?>">
-			Atualizações
-		</a>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=patropi-bjo-imports' ) ); ?>" class="btn <?php echo ( 'patropi-bjo-imports' === $current_page_slug ) ? 'btn-primary' : 'btn-outline-primary'; ?>">
 			Importações
+		</a>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=patropi-bjo-updates' ) ); ?>" class="btn <?php echo ( 'patropi-bjo-updates' === $current_page_slug || ! isset( $_GET['page'] ) ) ? 'btn-primary' : 'btn-outline-primary'; ?>">
+			Atualizações
 		</a>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=patropi-bjo-contact' ) ); ?>" class="btn <?php echo ( 'patropi-bjo-contact' === $current_page_slug ) ? 'btn-primary' : 'btn-outline-primary'; ?>">
 			Suporte

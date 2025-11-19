@@ -20,7 +20,7 @@ $logs = $wpdb->get_results( "SELECT * FROM `{$log_table_name}` ORDER BY log_time
 ?>
 <?php require_once __DIR__ . '/admin-header.php'; ?> 
 
-<div class="col-lg-12 mb-4">
+<div class="col-lg-12 mb-4"> 
 	<div class="card">
 		<div class="card-body">
 			<h2 class="card-title h4">Enviar Novo Artigo</h2>
@@ -29,23 +29,13 @@ $logs = $wpdb->get_results( "SELECT * FROM `{$log_table_name}` ORDER BY log_time
 				<input type="hidden" name="action" value="patropi_bjo_handle_upload">
 				<?php wp_nonce_field( 'patropi_bjo_upload_nonce', 'patropi_bjo_upload_nonce_field' ); ?>
 				<div class="row align-items-end">
-					<div class="col-md-3 mb-3">
+					<div class="col-md-5 mb-3">
 						<label for="xmlfile" class="form-label">Arquivo XML</label>
 						<input class="form-control" type="file" name="xmlfile" id="xmlfile" accept=".xml,application/xml" required>
 					</div>
-					<div class="col-md-3 mb-3">
+					<div class="col-md-5 mb-3">
 						<label for="pdffile" class="form-label">Arquivo PDF</label>
 						<input class="form-control" type="file" name="pdffile" id="pdffile" accept=".pdf,application/pdf" required>
-					</div>
-					<div class="col-md-4 mb-3">
-						<label class="form-label">Ambiente</label>
-						<div class="btn-group w-100" role="group">
-							<input type="radio" class="btn-check" name="n8n_environment" id="env-prod" value="production" autocomplete="off" checked>
-							<label class="btn btn-outline-primary" for="env-prod">Produção</label>
-
-							<input type="radio" class="btn-check" name="n8n_environment" id="env-test" value="test" autocomplete="off">
-							<label class="btn btn-outline-primary" for="env-test">Teste</label>
-						</div>
 					</div>
 					<div class="col-md-2 d-flex align-items-end mb-3">
 						<button class="w-100 btn btn-primary" type="submit">Enviar Arquivos</button>
@@ -71,7 +61,7 @@ $logs = $wpdb->get_results( "SELECT * FROM `{$log_table_name}` ORDER BY log_time
 						</tr>
 					</thead>
 					<tbody>
-						<?php if ( ! empty( $logs ) ) : ?>
+						<?php if ( ! empty( $logs ) ) : ?>~
 							<?php foreach ( $logs as $log ) : ?>
 								<?php
 									// Gera os links para o post.
@@ -107,16 +97,34 @@ $logs = $wpdb->get_results( "SELECT * FROM `{$log_table_name}` ORDER BY log_time
 	<div class="card h-100">
 		<div class="card-body">
 			<h2 class="card-title h4">Detalhes da Integração</h2>
-			<p class="lead mb-3">Informações sobre o workflow do N8N.</p>
-			<ul class="list-group list-group-flush">
+			<p class="lead mb-3">Configurações e informações sobre o N8N.</p>
+ 
+			<?php
+			// Pega o ambiente atual salvo no banco de dados.
+			$current_env = get_option( 'patropi_bjo_n8n_environment', 'production' ); 
+			?>
+			<ul class="list-group list-group-flush mb-4">
 				<li class="list-group-item px-0"><strong>URL do Workflow:</strong> <a href="https://n8n-service-qz5q.onrender.com/" target="_blank" rel="noopener noreferrer">Acessar</a></li>
-				<li class="list-group-item px-0"><strong>User:</strong> (a ser definido)</li>
-				<li class="list-group-item px-0"><strong>Senha:</strong> (a ser definido)</li>
 				<li class="list-group-item px-0"><strong>Plataforma:</strong> Render.com</li>
 				<li class="list-group-item px-0"><strong>Keep alive:</strong> cron-job.com</li>
 			</ul>
+
+			<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" class="mb-4">
+				<input type="hidden" name="action" value="patropi_bjo_save_n8n_environment">
+				<?php wp_nonce_field( 'patropi_bjo_save_n8n_env', 'patropi_bjo_n8n_env_nonce' ); ?>
+				<label class="form-label"><strong>Ambiente Global de Integração</strong></label>
+				<div class="btn-group w-100" role="group">
+					<input type="radio" class="btn-check" name="n8n_global_environment" id="global-env-prod" value="production" autocomplete="off" <?php checked( 'production', $current_env ); ?>>
+					<label class="btn btn-outline-primary" for="global-env-prod">Produção</label>
+
+					<input type="radio" class="btn-check" name="n8n_global_environment" id="global-env-test" value="test" autocomplete="off" <?php checked( 'test', $current_env ); ?>>
+					<label class="btn btn-outline-primary" for="global-env-test">Teste</label>
+				</div>
+				<button type="submit" class="btn btn-primary w-100 mt-2">Salvar Ambiente</button>
+			</form>
 		</div>
 	</div>
 </div>
 
-<?php require_once __DIR__ . '/admin-footer.php'; ?> 
+	</div><!-- .row -->
+</div><!-- .wrap -->
