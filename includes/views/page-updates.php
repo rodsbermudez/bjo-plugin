@@ -54,6 +54,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<table class="table table-hover mb-0">
 				<tbody>
 					<tr>
+						<td style="width: 15%;"><strong>0.0.10</strong></td>
+						<td>Adiciona paginação à lista de logs de importação na página 'Importações' e aplica o estilo do Bootstrap.</td>
+					</tr>
+					<tr>
 						<td style="width: 15%;"><strong>0.0.9</strong></td>
 						<td>Adiciona um sistema de rastreamento de visualizações para os artigos, com uma nova tabela no banco de dados e exibição no dashboard.</td>
 					</tr>
