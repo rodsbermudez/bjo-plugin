@@ -46,13 +46,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 </div>
 
-<div class="col-lg-6 mb-4">
+<div class="col-lg-6 mb-4"> 
 	<div class="card h-100"> 
 		<div class="card-body">
 			<h2 class="card-title h4">Histórico de Versões</h2>
 			<p class="lead mb-3">Acompanhe as novidades e correções de cada versão.</p>
 			<table class="table table-hover mb-0">
 				<tbody>
+					<tr>
+						<td style="width: 15%;"><strong>0.0.11</strong></td>
+						<td>Adiciona verificação para as taxonomias 'palavra-chave' e 'tipo-do-artigo' no 'Status do Sistema'.</td>
+					</tr>
 					<tr>
 						<td style="width: 15%;"><strong>0.0.10</strong></td>
 						<td>Adiciona paginação à lista de logs de importação na página 'Importações' e aplica o estilo do Bootstrap.</td>
