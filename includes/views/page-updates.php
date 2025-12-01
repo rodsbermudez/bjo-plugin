@@ -50,9 +50,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="card h-100"> 
 		<div class="card-body">
 			<h2 class="card-title h4">Histórico de Versões</h2>
-			<p class="lead mb-3">Acompanhe as novidades e correções de cada versão.</p>
+			<p class="lead mb-3">Acompanhe as novidades e correções de cada versão.</p> 
 			<table class="table table-hover mb-0">
 				<tbody>
+					<tr>
+						<td style="width: 15%;"><strong>0.0.13</strong></td>
+						<td>Altera a taxonomia nativa de 'Categorias' para 'Áreas de Atuação', incluindo a modificação do slug da URL para 'area-de-atuacao'.</td>
+					</tr>
+					<tr>
+						<td style="width: 15%;"><strong>0.0.12</strong></td>
+						<td>Cria os shortcodes <code>[bjo_referencias_artigo]</code>, <code>[bjo_artigo_info]</code> e <code>[bjo_listar_autores]</code> para exibir informações detalhadas dos artigos, referências e autores.</td>
+					</tr>
 					<tr>
 						<td style="width: 15%;"><strong>0.0.11</strong></td>
 						<td>Adiciona verificação para as taxonomias 'palavra-chave' e 'tipo-do-artigo' no 'Status do Sistema'.</td>
