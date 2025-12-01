@@ -1,0 +1,63 @@
+/**
+ * Estilos customizados para o front-end do site (tema).
+ */
+.filter-group {
+    margin-bottom: 1.5rem;
+}
+
+.filter-checkbox-group.collapsible-filter {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 4px;
+    /* Propriedades para a animação */
+    overflow: hidden;
+    max-height: 1000px; /* Altura máxima quando aberto */
+    opacity: 1;
+    transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out, padding 0.5s ease-in-out;
+}
+
+/* --- ESTADO PADRÃO (FILTROS FECHADOS) --- */
+
+/* Em grupos SEM seleção e FECHADOS, recolhe o container */
+.bjo-filters-form .filter-group:not(.has-selection):not(.is-open) .collapsible-filter {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+}
+
+/* Em grupos COM seleção e FECHADOS, esconde os itens não selecionados */
+.bjo-filters-form .filter-group.has-selection:not(.is-open) .filter-checkbox-item:not(.is-selected) {
+    display: none; /* display:none aqui é aceitável pois não é o que está sendo animado */
+}
+
+/* --- ESTADO ABERTO --- */
+
+/* Quando o grupo está aberto, garante que todos os itens sejam visíveis */
+.bjo-filters-form .filter-group.is-open .filter-checkbox-item {
+    display: block;
+}
+
+.filter-toggle-button {
+    background: none;
+    border: none;
+    color: #0073aa; /* Cor padrão de links do WordPress */
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 5px 0;
+    margin-top: 5px;
+}
+
+/* Estilos rápidos para o novo campo de busca. Podemos mover para o CSS principal depois. */
+.search-text-input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.search-scope-group .filter-checkbox-item {
+    display: inline-block;
+    margin-right: 15px;
+}

@@ -157,7 +157,7 @@ function bjo_artigo_info_shortcode() {
                 echo '<p><strong>Editora do Artigo:</strong> ' . esc_html($artigo_publisher) . '</p>';
             }
             ?>
-        </div>
+        </div> 
 
         <?php
         // 5. Botões de Download
@@ -237,3 +237,94 @@ function bjo_listar_autores_shortcode() {
 } 
 add_shortcode( 'bjo_listar_autores', 'bjo_listar_autores_shortcode' );
 
+/**
+ * Shortcode para exibir um formulário de filtros de artigos por taxonomias.
+ *
+ * Usage: [bjo_filtros_artigos]
+ *
+ * @return string O HTML do formulário de filtros.
+ */
+function bjo_filtros_artigos_shortcode() {
+    ob_start();
+
+    // Define as taxonomias que queremos no filtro e seus rótulos.
+    $taxonomies = [
+        'area-de-atuacao' => 'Área de Atuação', // Usamos o slug que definimos
+        'autor'           => 'Autor',           // Taxonomia customizada 'autor'
+        'journal'         => 'Journal',         // Taxonomia customizada 'journal'
+        'palavra-chave'   => 'Palavra-chave',   // Taxonomia nativa do WordPress para tags
+        // 'tipo-do-artigo'  => 'Tipo do Artigo', // Removido/Comentado pois a taxonomia não existe
+    ]; 
+
+    // Pega os valores atuais do filtro da URL para manter os campos selecionados.
+    $current_filters = [];
+    foreach ( array_keys( $taxonomies ) as $tax_slug ) {
+        if ( isset( $_GET[ 'filter_' . str_replace( '-', '_', $tax_slug ) ] ) ) {
+            $current_filters[ $tax_slug ] = (array) $_GET[ 'filter_' . str_replace( '-', '_', $tax_slug ) ];
+        }
+    }
+    ?>
+
+    <div class="bjo-article-filters">
+        <form role="search" method="get" class="bjo-filters-form" action="<?php echo esc_url( home_url( '/artigos/' ) ); ?>">
+            
+            <div class="filter-group">
+                <label for="s_text" class="filter-label"><strong>Pesquisar por termo</strong></label>
+                <input type="search" class="search-text-input" name="s_text" id="s_text" value="<?php echo esc_attr( $_GET['s_text'] ?? '' ); ?>" placeholder="Digite para buscar no título ou conteúdo...">
+            </div>
+ 
+            <!-- O campo 's' é o campo de busca nativo do WordPress, que usaremos nos bastidores. -->
+            <!-- O 's_text' é o que o usuário vê, e seu valor será copiado para 's' via JS se o escopo for o conteúdo. -->
+            <input type="hidden" name="s" id="s_native_search" value="<?php echo esc_attr( $_GET['s'] ?? '' ); ?>">
+
+            <hr>
+
+            <?php foreach ( $taxonomies as $slug => $label ) : ?>
+                <?php
+                // O slug da taxonomia 'category' é 'category', mas o nosso slug de URL é 'area-de-atuacao'.
+                // Precisamos usar o nome correto da taxonomia para buscar os termos.
+                $taxonomy_name = ( $slug === 'area-de-atuacao' ) ? 'category' : $slug;
+                
+                $terms = get_terms( [
+                    'taxonomy'   => $taxonomy_name,
+                    'hide_empty' => false, // Garante que termos sem posts também apareçam.
+                    // FORÇA a busca a ignorar a query principal da página, resolvendo o desaparecimento dos filtros.
+                    'update_term_meta_cache' => false,
+                ] );
+
+                if ( empty( $terms ) || is_wp_error( $terms ) ) {
+                    continue; 
+                }
+
+                // O nome do campo no formulário (ex: filter_area_de_atuacao).
+                $field_name = 'filter_' . str_replace( '-', '_', $slug );
+                $current_selection = $current_filters[ $slug ] ?? [];
+                $has_selection = ! empty( $current_selection );
+                ?>
+                <div class="filter-group <?php echo $has_selection ? 'has-selection' : ''; ?>">
+                    <label for="<?php echo esc_attr( $field_name ); ?>" class="filter-label"><strong><?php echo esc_html( $label ); ?></strong></label>
+                    <div class="filter-checkbox-group collapsible-filter" id="<?php echo esc_attr( $field_name ); ?>">
+                        <?php foreach ( $terms as $term ) : 
+                            $checkbox_id = esc_attr( $field_name . '_' . $term->term_id );
+                            $is_selected = in_array( $term->term_id, $current_selection );
+                        ?>
+                            <div class="filter-checkbox-item <?php echo $is_selected ? 'is-selected' : ''; ?>">
+                                <input type="checkbox" name="<?php echo esc_attr( $field_name ); ?>[]" id="<?php echo $checkbox_id; ?>" value="<?php echo esc_attr( $term->term_id ); ?>" <?php checked( in_array( $term->term_id, $current_selection ) ); ?>>
+                                <label for="<?php echo $checkbox_id; ?>"><?php echo esc_html( $term->name ); ?></label>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <button type="button" class="filter-toggle-button">Ver mais</button>
+                </div>
+            <?php endforeach; ?>
+
+            <div class="filter-actions">
+                <button type="submit" class="button button-primary">Filtrar</button>
+                <a href="<?php echo esc_url( home_url( '/artigos/' ) ); ?>" class="button">Limpar Filtros</a>
+            </div>
+        </form>
+    </div>
+    <?php
+    return ob_get_clean();  
+}
+add_shortcode( 'bjo_filtros_artigos', 'bjo_filtros_artigos_shortcode' );

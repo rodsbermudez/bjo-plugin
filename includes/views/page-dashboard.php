@@ -106,6 +106,11 @@ if ( $views_table_exists === $views_table_name ) {
 							<td class="text-center"><?php echo get_option( 'users_can_register' ) ? '<span class="badge bg-success">Habilitado</span>' : '<span class="badge bg-danger">Desabilitado</span>'; ?></td>
 							<td class="text-end"><a href="<?php echo esc_url( admin_url( 'options-general.php' ) ); ?>" class="btn btn-sm btn-outline-secondary">Gerenciar</a></td>
 						</tr>
+						<tr>
+							<td>Filtro de Artigos</td>
+							<td class="text-center"><?php echo shortcode_exists( 'bjo_filtros_artigos' ) ? '<span class="badge bg-success">Ativo</span>' : '<span class="badge bg-danger">Inativo</span>'; ?></td>
+							<td class="text-end"><a href="<?php echo esc_url( home_url( '/artigos/' ) ); ?>" class="btn btn-sm btn-outline-secondary" target="_blank">Ver Filtros</a></td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
@@ -181,6 +186,33 @@ if ( $views_table_exists === $views_table_name ) {
 							<td><code><?php echo esc_html( $views_table_name ); ?></code></td>
 							<td>Armazena os acessos (visualizações) de cada artigo.</td>
 							<td class="text-end"><?php echo is_numeric( $views_row_count ) ? number_format_i18n( $views_row_count ) : $views_row_count; ?></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="col-12 mb-4">
+	<div class="card">
+		<div class="card-body">
+			<h2 class="card-title h4">Queries Customizadas</h2>
+			<p class="lead mb-3">Lista de queries customizadas disponíveis para uso no bloco "Query Loop" do editor de páginas.</p>
+			<div class="table-responsive">
+				<table class="table table-hover mb-0">
+					<thead class="table-light">
+						<tr>
+							<th scope="col" style="width: 20%;">ID da Query</th>
+							<th scope="col">Descrição</th>
+							<th scope="col" style="width: 25%;">Local de Uso</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>filtro-artigos</code></td>
+							<td>Filtra a lista de posts (artigos) com base nos parâmetros de taxonomia enviados pela URL (ex: <code>/artigos/?filter_autor[]=123</code>). Utilizada em conjunto com o shortcode <code>[bjo_filtros_artigos]</code>.</td>
+							<td>Página de listagem de Artigos (<code>/artigos/</code>).</td>
 						</tr>
 					</tbody>
 				</table>

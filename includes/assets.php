@@ -39,3 +39,26 @@ function patropi_bjo_admin_enqueue_assets( $hook_suffix ) {
 	}
 }
 add_action( 'admin_enqueue_scripts', 'patropi_bjo_admin_enqueue_assets' );
+
+/**
+ * Enfileira os scripts e estilos para o front-end.
+ */
+function bjo_enqueue_frontend_assets() {
+    // Enfileira o nosso novo arquivo de estilo para o front-end.
+    wp_enqueue_style(
+        'bjo-frontend-style', // Nome único para o nosso estilo.
+        plugin_dir_url( __DIR__ ) . 'assets/css/frontend-style.css', // Caminho para o arquivo.
+        array(), // Dependências (nenhuma neste caso).
+        '0.0.1' // Versão do arquivo.
+    );
+
+    // Enfileira o nosso novo arquivo de script para o front-end.
+    wp_enqueue_script(
+        'bjo-frontend-script', // Nome único para o nosso script.
+        plugin_dir_url( __DIR__ ) . 'assets/js/frontend-script.js', // Caminho para o arquivo.
+        array('jquery'), // Dependências (jQuery).
+        '0.0.1', // Versão do arquivo.
+        true // Carrega no rodapé.
+    );
+}
+add_action( 'wp_enqueue_scripts', 'bjo_enqueue_frontend_assets' );

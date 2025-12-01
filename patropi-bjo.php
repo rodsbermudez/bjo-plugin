@@ -48,6 +48,8 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/importer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/assets.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/taxonomias.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/shortcodes.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/queries.php';
+
 
 /**
  * Função principal executada na ativação do plugin.
@@ -253,6 +255,57 @@ function bjo_change_category_args( $args, $taxonomy, $object_type ) {
 	return $args;
 }
 add_filter( 'register_taxonomy_args', 'bjo_change_category_args', 10, 3 );
+
+/**
+ * Modifica a query de posts do Elementor para aplicar os filtros de taxonomia da URL.
+ *
+ * @param \WP_Query $query A instância da query do WordPress.
+ */
+function bjo_handle_article_filters_query( $query ) {
+    // Mapeia os parâmetros da URL para as taxonomias corretas.
+    $tax_map = [
+        'filter_area_de_atuacao' => 'category',
+        'filter_autor'           => 'autor',
+        'filter_journal'         => 'journal',
+        'filter_palavra_chave'   => 'palavra-chave',
+        'filter_tipo_do_artigo'  => 'tipo-do-artigo',
+    ];
+
+    $tax_query = ['relation' => 'AND']; // Requer que o post corresponda a TODAS as taxonomias filtradas.
+
+    $is_filter_active = false;
+
+    foreach ( $tax_map as $param => $taxonomy ) {
+        // Verifica se o parâmetro existe na URL, não está vazio e é um array.
+        if ( isset( $_GET[ $param ] ) && is_array( $_GET[ $param ] ) && ! empty( $_GET[ $param ] ) ) {
+            
+            $term_ids = array_map( 'intval', $_GET[ $param ] ); // Garante que são IDs numéricos.
+
+            if ( ! empty( $term_ids ) ) {
+                $tax_query[] = [
+                    'taxonomy' => $taxonomy,
+                    'field'    => 'term_id',
+                    'terms'    => $term_ids,
+                    'operator' => 'IN', // O post pode ter QUALQUER um dos termos selecionados para esta taxonomia.
+                ];
+                $is_filter_active = true;
+            }
+        }
+    }
+
+    // Só modifica a query se pelo menos um filtro estiver ativo.
+    if ( $is_filter_active ) {
+        $current_tax_query = $query->get( 'tax_query' );
+        if ( ! is_array( $current_tax_query ) ) {
+            $current_tax_query = [];
+        }
+
+        // Combina a nossa query de filtro com qualquer query existente.
+        $query->set( 'tax_query', array_merge( $current_tax_query, $tax_query ) );
+    }
+}
+// O nome 'filtro_artigos' deve ser o mesmo usado no campo "Query ID" do widget Posts do Elementor.
+add_action( 'elementor/query/filtro_artigos', 'bjo_handle_article_filters_query' );
 
 /**
  * Processa a submissão do formulário para salvar o ambiente do N8N.

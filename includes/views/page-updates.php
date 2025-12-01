@@ -54,6 +54,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<table class="table table-hover mb-0">
 				<tbody>
 					<tr>
+						<td style="width: 15%;"><strong>0.0.14</strong></td>
+						<td>Aprimora o formulário de filtros (<code>[bjo_filtros_artigos]</code>), implementando um design de 'acordeão' com checkboxes. Limita a altura dos grupos de filtros abertos e adiciona uma barra de rolagem para listas longas, melhorando a usabilidade.</td>
+					</tr>
+					<tr>
 						<td style="width: 15%;"><strong>0.0.13</strong></td>
 						<td>Altera a taxonomia nativa de 'Categorias' para 'Áreas de Atuação', incluindo a modificação do slug da URL para 'area-de-atuacao'.</td>
 					</tr>
