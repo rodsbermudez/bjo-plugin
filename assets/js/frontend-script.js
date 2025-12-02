@@ -1,27 +1,32 @@
+console.log('BJO DEBUG: frontend-script.js carregado.');
+
 jQuery(document).ready(function ($) {
-    // Itera sobre cada botão de toggle que criamos.
-    $('.filter-toggle-button').each(function () {
-        const $button = $(this);
-        const $filterGroup = $button.closest('.filter-group');
+	console.log('BJO DEBUG: Documento pronto (document.ready).');
 
-        function updateButtonText() {
-            if ($filterGroup.hasClass('is-open')) {
-                $button.text('Ver menos');
-            } else if ($filterGroup.hasClass('has-selection')) {
-                $button.text('Ver mais');
-            } else {
-                $button.text('Ver todos');
-            }
-        }
+	function inicializarSelect2() {
+		console.log('BJO DEBUG: Tentando inicializar o Select2...');
+		var $selects = $('.bjo-taxonomy-select');
+		console.log('BJO DEBUG: Elementos encontrados com a classe ".bjo-taxonomy-select": ' + $selects.length);
 
-        // Define o estado inicial e o texto do botão na carga da página. 
-        updateButtonText();
+		if ($selects.length > 0 && $.fn.select2) {
+			console.log('BJO DEBUG: Aplicando Select2 em ' + $selects.length + ' elemento(s).');
+			$selects.select2({
+				// language: "pt-BR"
+			});
+		} else if ($selects.length === 0) {
+			console.log('BJO DEBUG: Nenhum elemento encontrado para aplicar o Select2.');
+		} else {
+			console.log('BJO DEBUG: A função $.fn.select2 não está disponível.');
+		}
+	}
 
-        $button.on('click', function (e) {
-            e.preventDefault();
-            console.log('Botão de filtro clicado!', this); // <-- DEBUG ADICIONADO AQUI
-            $filterGroup.toggleClass('is-open');
-            updateButtonText();
-        });
-    });
-}); 
+	// Tenta inicializar quando o Elementor termina de carregar o frontend.
+	$(window).on('elementor/frontend/init', function () {
+		console.log('BJO DEBUG: Evento "elementor/frontend/init" disparado.');
+		inicializarSelect2();
+	});
+
+	// Como fallback, tenta inicializar após um pequeno atraso depois que a página inteira carregar.
+	// Às vezes, isso funciona se o hook do Elementor não for confiável para um widget específico.
+	setTimeout(inicializarSelect2, 1000);
+});

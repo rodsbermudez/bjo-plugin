@@ -40,6 +40,8 @@ if ( $views_table_exists === $views_table_name ) {
 	$views_row_count = '<span class="text-danger">Tabela não encontrada</span>';
 }
 
+// Pega o ID da página de busca avançada para verificação de status.
+$advanced_search_page_id = get_option( 'bjo_advanced_search_page_id', 0 );
 
 ?>
 <?php require_once __DIR__ . '/admin-header.php'; ?> 
@@ -110,6 +112,11 @@ if ( $views_table_exists === $views_table_name ) {
 							<td>Filtro de Artigos</td>
 							<td class="text-center"><?php echo shortcode_exists( 'bjo_filtros_artigos' ) ? '<span class="badge bg-success">Ativo</span>' : '<span class="badge bg-danger">Inativo</span>'; ?></td>
 							<td class="text-end"><a href="<?php echo esc_url( home_url( '/artigos/' ) ); ?>" class="btn btn-sm btn-outline-secondary" target="_blank">Ver Filtros</a></td>
+						</tr>
+						<tr>
+							<td>Busca Avançada</td>
+							<td class="text-center"><?php echo ! empty( $advanced_search_page_id ) ? '<span class="badge bg-success">Ativa</span>' : '<span class="badge bg-warning">Não selecionada</span>'; ?></td>
+							<td class="text-end"><a href="<?php echo esc_url( admin_url( 'admin.php?page=patropi-bjo-configs' ) ); ?>" class="btn btn-sm btn-outline-secondary">Gerenciar</a></td>
 						</tr>
 					</tbody>
 				</table>

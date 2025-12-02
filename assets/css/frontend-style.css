@@ -5,51 +5,7 @@
     margin-bottom: 1.5rem;
 }
 
-.filter-checkbox-group.collapsible-filter {
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 4px;
-    /* Propriedades para a animação */
-    overflow: hidden;
-    max-height: 1000px; /* Altura máxima quando aberto */
-    opacity: 1;
-    transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out, padding 0.5s ease-in-out;
-}
-
-/* --- ESTADO PADRÃO (FILTROS FECHADOS) --- */
-
-/* Em grupos SEM seleção e FECHADOS, recolhe o container */
-.bjo-filters-form .filter-group:not(.has-selection):not(.is-open) .collapsible-filter {
-    max-height: 0;
-    opacity: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    border-width: 0;
-}
-
-/* Em grupos COM seleção e FECHADOS, esconde os itens não selecionados */
-.bjo-filters-form .filter-group.has-selection:not(.is-open) .filter-checkbox-item:not(.is-selected) {
-    display: none; /* display:none aqui é aceitável pois não é o que está sendo animado */
-}
-
-/* --- ESTADO ABERTO --- */
-
-/* Quando o grupo está aberto, garante que todos os itens sejam visíveis */
-.bjo-filters-form .filter-group.is-open .filter-checkbox-item {
-    display: block;
-}
-
-.filter-toggle-button {
-    background: none;
-    border: none;
-    color: #0073aa; /* Cor padrão de links do WordPress */
-    text-decoration: underline;
-    cursor: pointer;
-    padding: 5px 0;
-    margin-top: 5px;
-}
-
-/* Estilos rápidos para o novo campo de busca. Podemos mover para o CSS principal depois. */
+/* Estilo para o campo de busca por texto no formulário de filtros. */
 .search-text-input {
     width: 100%;
     padding: 8px;
@@ -57,7 +13,36 @@
     border: 1px solid #ddd;
     border-radius: 4px;
 }
-.search-scope-group .filter-checkbox-item {
-    display: inline-block;
-    margin-right: 15px;
+
+/* --- Estilos de Ajuste para o Select2 --- */
+
+/* Ajusta o tamanho da fonte dos itens selecionados (as "tags"). */
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    font-size: 0.85rem;
+    /* Ajuste de padding:
+     * Topo/Fundo: 2px
+     * Direita: 5px
+     * Esquerda: 20px (para dar espaço ao botão 'x' e à primeira letra) */
+    padding: 2px 5px 2px 20px;
+    margin-top: 4px; /* Melhora o alinhamento vertical. */
+}
+
+/* Ajusta o tamanho da fonte do campo de busca DENTRO do select múltiplo. */
+/* Este é o campo que você mencionou com font-size: 100%. */
+.select2-container .select2-search--inline .select2-search__field {
+    font-size: 1rem !important; /* Força a fonte para um tamanho padrão. */
+    margin-top: 6px; /* Alinha verticalmente com as tags. */
+    padding: 0;
+}
+
+/* Adiciona um pequeno espaçamento para evitar que o dropdown sobreponha o campo de busca. */
+.select2-dropdown {
+    margin-top: 32px; /* Empurra o dropdown 5px para baixo. */
+    border-color: #ced4da; /* Cor de borda mais suave, padrão bootstrap. */
+}
+
+/* Ajusta o tamanho da fonte dos itens na lista de resultados do dropdown. */
+.select2-results__option {
+    font-size: 0.9rem; /* Define um tamanho de fonte menor e consistente para as opções. */
+    padding: 6px 12px; /* Melhora o espaçamento interno. */
 }

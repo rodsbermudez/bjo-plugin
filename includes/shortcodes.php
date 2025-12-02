@@ -271,6 +271,14 @@ function bjo_filtros_artigos_shortcode() {
             <div class="filter-group">
                 <label for="s_text" class="filter-label"><strong>Pesquisar por termo</strong></label>
                 <input type="search" class="search-text-input" name="s_text" id="s_text" value="<?php echo esc_attr( $_GET['s_text'] ?? '' ); ?>" placeholder="Digite para buscar no título ou conteúdo...">
+                <?php
+                // Adiciona o link para a busca avançada, se uma página foi configurada.
+                $advanced_search_page_id = get_option( 'bjo_advanced_search_page_id', 0 );
+                if ( ! empty( $advanced_search_page_id ) ) {
+                    $advanced_search_url = get_permalink( $advanced_search_page_id );
+                    echo '<p class="advanced-search-link mt-2"><a href="' . esc_url( $advanced_search_url ) . '">Busca Avançada</a></p>';
+                }
+                ?>
             </div>
  
             <!-- O campo 's' é o campo de busca nativo do WordPress, que usaremos nos bastidores. -->
@@ -298,23 +306,25 @@ function bjo_filtros_artigos_shortcode() {
 
                 // O nome do campo no formulário (ex: filter_area_de_atuacao).
                 $field_name = 'filter_' . str_replace( '-', '_', $slug );
-                $current_selection = $current_filters[ $slug ] ?? [];
+                $current_selection = $current_filters[ $slug ] ?? []; 
                 $has_selection = ! empty( $current_selection );
                 ?>
-                <div class="filter-group <?php echo $has_selection ? 'has-selection' : ''; ?>">
+                <div class="filter-group">
                     <label for="<?php echo esc_attr( $field_name ); ?>" class="filter-label"><strong><?php echo esc_html( $label ); ?></strong></label>
-                    <div class="filter-checkbox-group collapsible-filter" id="<?php echo esc_attr( $field_name ); ?>">
-                        <?php foreach ( $terms as $term ) : 
-                            $checkbox_id = esc_attr( $field_name . '_' . $term->term_id );
-                            $is_selected = in_array( $term->term_id, $current_selection );
-                        ?>
-                            <div class="filter-checkbox-item <?php echo $is_selected ? 'is-selected' : ''; ?>">
-                                <input type="checkbox" name="<?php echo esc_attr( $field_name ); ?>[]" id="<?php echo $checkbox_id; ?>" value="<?php echo esc_attr( $term->term_id ); ?>" <?php checked( in_array( $term->term_id, $current_selection ) ); ?>>
-                                <label for="<?php echo $checkbox_id; ?>"><?php echo esc_html( $term->name ); ?></label>
-                            </div>
+                    <select 
+                        class="bjo-taxonomy-select" 
+                        name="<?php echo esc_attr( $field_name ); ?>[]" 
+                        id="<?php echo esc_attr( $field_name ); ?>" 
+                        multiple="multiple" 
+                        style="width: 100%;"
+                        data-placeholder="Selecione um ou mais itens"
+                    >
+                        <?php foreach ( $terms as $term ) : ?>
+                            <option value="<?php echo esc_attr( $term->term_id ); ?>" <?php selected( in_array( $term->term_id, $current_selection ) ); ?>>
+                                <?php echo esc_html( $term->name ); ?>
+                            </option>
                         <?php endforeach; ?>
-                    </div>
-                    <button type="button" class="filter-toggle-button">Ver mais</button>
+                    </select>
                 </div>
             <?php endforeach; ?>
 
