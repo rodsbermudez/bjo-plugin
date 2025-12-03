@@ -46,3 +46,15 @@
     font-size: 0.9rem; /* Define um tamanho de fonte menor e consistente para as opções. */
     padding: 6px 12px; /* Melhora o espaçamento interno. */
 }
+
+/* --- Estilos para o Escopo da Busca --- */
+.search-scope-group {
+    margin: -0.5rem 0 1rem 0; /* Espaçamento acima e abaixo do grupo. */
+}
+
+.search-scope-item {
+    display: inline-block;
+    margin-right: 15px;
+    margin-top: 8px;
+    font-size: 0.9rem;
+}

@@ -270,7 +270,29 @@ function bjo_filtros_artigos_shortcode() {
             
             <div class="filter-group">
                 <label for="s_text" class="filter-label"><strong>Pesquisar por termo</strong></label>
-                <input type="search" class="search-text-input" name="s_text" id="s_text" value="<?php echo esc_attr( $_GET['s_text'] ?? '' ); ?>" placeholder="Digite para buscar no título ou conteúdo...">
+                <input type="search" class="search-text-input" name="s_text" id="s_text" value="<?php echo esc_attr( $_GET['s_text'] ?? '' ); ?>" placeholder="Digite para buscar...">
+                
+                <div class="search-scope-group">
+                    <label class="filter-label"><strong>Buscar em:</strong></label>
+                    <?php
+                    $search_scopes = [
+                        'post_title'    => 'Título',
+                        'artigo_body'   => 'Artigo completo',
+                        'abstract_html' => 'Resumo',
+                        'artigo_doi'    => 'DOI',
+                    ];
+
+                    // Se nenhum escopo for enviado, todos são marcados por padrão.
+                    $current_scopes = $_GET['search_scope'] ?? array_keys( $search_scopes );
+
+                    foreach ( $search_scopes as $value => $label ) : ?>
+                        <div class="search-scope-item">
+                            <input type="checkbox" name="search_scope[]" id="scope_<?php echo esc_attr( $value ); ?>" value="<?php echo esc_attr( $value ); ?>" <?php checked( in_array( $value, $current_scopes, true ) ); ?>>
+                            <label for="scope_<?php echo esc_attr( $value ); ?>"><?php echo esc_html( $label ); ?></label>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+
                 <?php
                 // Adiciona o link para a busca avançada, se uma página foi configurada.
                 $advanced_search_page_id = get_option( 'bjo_advanced_search_page_id', 0 );

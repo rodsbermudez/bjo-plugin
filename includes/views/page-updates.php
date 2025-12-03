@@ -54,6 +54,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<table class="table table-hover mb-0">
 				<tbody>
 					<tr>
+						<td style="width: 15%;"><strong>0.0.16</strong></td>
+						<td>Aprimora a busca por texto, permitindo que o usuário selecione o escopo da pesquisa (Título, Artigo completo, Resumo, DOI) e ajusta a consulta para refletir dinamicamente essa seleção.</td>
+					</tr>
+					<tr>
+						<td style="width: 15%;"><strong>0.0.15</strong></td>
+						<td>Substitui os filtros de taxonomia de acordeão por campos de busca interativos (Select2), melhorando a usabilidade e a performance na seleção de múltiplos termos.</td>
+					</tr>
+					<tr>
 						<td style="width: 15%;"><strong>0.0.14</strong></td>
 						<td>Aprimora o formulário de filtros (<code>[bjo_filtros_artigos]</code>), implementando um design de 'acordeão' com checkboxes. Limita a altura dos grupos de filtros abertos e adiciona uma barra de rolagem para listas longas, melhorando a usabilidade.</td>
 					</tr>

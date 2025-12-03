@@ -83,11 +83,47 @@ function bjo_add_custom_search_where( $clauses, $query ) {
 
 	if ( ! empty( $search_term ) ) {
 		global $wpdb;
+
+		// Garante que não teremos posts duplicados se o termo for encontrado em múltiplos campos.
+		$clauses['distinct'] = 'DISTINCT';
+
+		// Junta a tabela de metadados para que possamos pesquisar nos campos do ACF.
+		$clauses['join'] .= " LEFT JOIN {$wpdb->postmeta} AS pm ON {$wpdb->posts}.ID = pm.post_id";
+
 		$like = '%' . $wpdb->esc_like( $search_term ) . '%';
-		$clauses['where'] .= $wpdb->prepare(
-			" AND ( {$wpdb->posts}.post_title LIKE %s OR {$wpdb->posts}.post_content LIKE %s )",
-			$like, $like
-		);
+
+		// Pega os escopos da busca da URL. Se não houver, usa todos como padrão.
+		$default_scopes = [ 'post_title', 'artigo_body', 'abstract_html', 'artigo_doi' ];
+		$selected_scopes = $_GET['search_scope'] ?? $default_scopes;
+
+		$search_conditions = [];
+		$prepare_args = [];
+
+		// Constrói as condições dinamicamente com base nos escopos selecionados.
+		if ( in_array( 'post_title', $selected_scopes, true ) ) {
+			$search_conditions[] = "{$wpdb->posts}.post_title LIKE %s";
+			$prepare_args[] = $like;
+		}
+		if ( in_array( 'artigo_body', $selected_scopes, true ) ) {
+			$search_conditions[] = "(pm.meta_key = 'artigo_body' AND pm.meta_value LIKE %s)";
+			$prepare_args[] = $like;
+		}
+		if ( in_array( 'abstract_html', $selected_scopes, true ) ) {
+			$search_conditions[] = "(pm.meta_key = 'abstract_html' AND pm.meta_value LIKE %s)";
+			$prepare_args[] = $like;
+		}
+		if ( in_array( 'artigo_doi', $selected_scopes, true ) ) {
+			$search_conditions[] = "(pm.meta_key = 'artigo_doi' AND pm.meta_value LIKE %s)";
+			$prepare_args[] = $like;
+		}
+
+		// Se houver condições, adiciona à cláusula WHERE.
+		if ( ! empty( $search_conditions ) ) {
+			$where_clause = ' AND ( ' . implode( ' OR ', $search_conditions ) . ' )';
+
+			// Adiciona a cláusula preparada à query principal.
+			$clauses['where'] .= $wpdb->prepare( $where_clause, $prepare_args );
+		}
 	}
 
 	// Remove o filtro para não afetar nenhuma outra query.
