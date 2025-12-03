@@ -118,6 +118,11 @@ $advanced_search_page_id = get_option( 'bjo_advanced_search_page_id', 0 );
 							<td class="text-center"><?php echo ! empty( $advanced_search_page_id ) ? '<span class="badge bg-success">Ativa</span>' : '<span class="badge bg-warning">Não selecionada</span>'; ?></td>
 							<td class="text-end"><a href="<?php echo esc_url( admin_url( 'admin.php?page=patropi-bjo-configs' ) ); ?>" class="btn btn-sm btn-outline-secondary">Gerenciar</a></td>
 						</tr>
+						<tr>
+							<td>Mapa Interativo</td>
+							<td class="text-center"><?php echo shortcode_exists( 'mapa_acessos' ) ? '<span class="badge bg-success">Ativo</span>' : '<span class="badge bg-danger">Inativo</span>'; ?></td>
+							<td class="text-end"><span class="btn btn-sm btn-outline-secondary disabled" title="Visível nas páginas de artigo">N/A</span></td>
+						</tr>
 					</tbody>
 				</table>
 			</div>

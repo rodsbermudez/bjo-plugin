@@ -360,3 +360,85 @@ function bjo_filtros_artigos_shortcode() {
     return ob_get_clean();  
 }
 add_shortcode( 'bjo_filtros_artigos', 'bjo_filtros_artigos_shortcode' );
+
+/**
+ * Shortcode para exibir um trecho do conteúdo onde o termo de busca foi encontrado.
+ *
+ * Uso: [bjo_trecho_busca]
+ * Deve ser usado dentro do loop de posts na página de resultados de busca.
+ *
+ * @return string O HTML com o trecho e o termo destacado.
+ */
+function bjo_trecho_busca_shortcode() {
+	$post_id = get_the_ID();
+	// CONDIÇÃO DE GUARDA: Só executa se houver uma busca por texto ativa.
+	if ( empty( $_GET['s_text'] ) || ! $post_id || ! function_exists( 'get_field' ) ) {
+		return '';
+	}
+	$search_term = sanitize_text_field( $_GET['s_text'] );
+	$output      = '';
+
+	// Pega os escopos da busca da URL para saber onde procurar o trecho.
+	$default_scopes = [ 'post_title', 'artigo_body', 'abstract_html', 'artigo_doi' ];
+	$selected_scopes = $_GET['search_scope'] ?? $default_scopes;
+
+	// Mapeia os campos para os rótulos que queremos exibir.
+	// A busca no título e DOI não gera trecho, mas a lógica está preparada.
+	$available_fields = [
+		'artigo_body'   => 'no Artigo Completo',
+		'abstract_html' => 'no Resumo',
+		// 'post_title' e 'artigo_doi' são pesquisados, mas não geram trecho de contexto.
+	];
+
+	foreach ( $available_fields as $field_name => $label ) {
+		// Só processa o campo se ele foi parte do escopo da busca.
+		if ( ! in_array( $field_name, $selected_scopes, true ) ) {
+			continue;
+		}
+
+		$content = get_field( $field_name, $post_id );
+
+		if ( empty( $content ) ) {
+			continue;
+		}
+
+		// 1. Remove todas as tags HTML para evitar quebras e fazer uma busca limpa.
+		$clean_content = wp_strip_all_tags( $content );
+		// 2. Remove quebras de linha excessivas para um texto mais fluido.
+		$clean_content = preg_replace( '/\s+/', ' ', $clean_content );
+
+		// 3. Procura a primeira ocorrência do termo (case-insensitive).
+		$pos = stripos( $clean_content, $search_term );
+
+		if ( $pos !== false ) {
+			// 4. Extrai um trecho ao redor do termo encontrado.
+			$start   = max( 0, $pos - 50 ); // Pega um pouco antes.
+			$length  = strlen( $search_term ) + 100; // Pega o termo e um pouco depois.
+			$snippet = substr( $clean_content, $start, $length );
+
+			// Adiciona "..." se o trecho não começar no início do texto.
+			if ( $start > 0 ) {
+				$snippet = '... ' . $snippet;
+			}
+			// Adiciona "..." se o trecho não terminar no final do texto.
+			if ( ( $start + $length ) < strlen( $clean_content ) ) {
+				$snippet .= ' ...';
+			}
+
+			// 5. Destaca TODAS as ocorrências do termo no trecho (case-insensitive).
+			$highlighted_snippet = preg_replace(
+				'/' . preg_quote( $search_term, '/' ) . '/i',
+				'<strong>$0</strong>',
+				esc_html( $snippet )
+			);
+
+			// 6. Monta o HTML de saída.
+			$output .= '<p class="search-excerpt-context">';
+			$output .= '<small><em>Encontrado ' . esc_html( $label ) . ': ' . $highlighted_snippet . '</em></small>';
+			$output .= '</p>';
+		}
+	}
+
+	return $output;
+}
+add_shortcode( 'bjo_trecho_busca', 'bjo_trecho_busca_shortcode' );

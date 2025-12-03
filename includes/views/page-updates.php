@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<tbody>
 					<tr>
 						<td><strong>Busca de Citações</strong></td>
-						<td>Integração com a API da <a href="https://www.semanticscholar.org/" target="_blank">semanticscholar.org</a> (via N8N) para encontrar e exibir artigos que citam os posts do site através do shortcode <code>[enviar_referencias_n8n]</code>.</td>
+						<td>Integração com a API da <a href="https://opencitations.net/" target="_blank">OpenCitations</a> (via N8N) para encontrar e exibir artigos que citam os posts do site através do shortcode <code>[enviar_referencias_n8n]</code>.</td>
 					</tr>
 					<tr>
 						<td><strong>Shortcodes Dinâmicos</strong></td>
@@ -39,6 +39,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<tr>
 						<td><strong>Contador de Acessos</strong></td>
 						<td>Registra as visualizações de cada artigo, salvando o IP, ID do usuário (se logado) e a data do acesso.</td>
+					</tr>
+					<tr>
+						<td><strong>Mapa de Acessos</strong></td>
+						<td>Exibe um mapa geográfico interativo (GeoChart) com a distribuição dos acessos por país para cada artigo, utilizando o shortcode <code>[mapa_acessos]</code>.</td>
 					</tr>
 				</tbody>
 			</table>
@@ -53,6 +57,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<p class="lead mb-3">Acompanhe as novidades e correções de cada versão.</p> 
 			<table class="table table-hover mb-0">
 				<tbody>
+					<tr>
+						<td style="width: 15%;"><strong>0.0.17</strong></td>
+						<td>Ajusta a coleta de acessos para incluir geolocalização (país) e implementa o shortcode <code>[mapa_acessos]</code> para exibir um mapa de distribuição geográfica dos acessos por artigo.</td>
+					</tr>
 					<tr>
 						<td style="width: 15%;"><strong>0.0.16</strong></td>
 						<td>Aprimora a busca por texto, permitindo que o usuário selecione o escopo da pesquisa (Título, Artigo completo, Resumo, DOI) e ajusta a consulta para refletir dinamicamente essa seleção.</td>
