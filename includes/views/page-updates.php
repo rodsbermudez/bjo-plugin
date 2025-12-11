@@ -58,6 +58,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<table class="table table-hover mb-0">
 				<tbody>
 					<tr>
+						<td style="width: 15%;"><strong>0.0.18</strong></td>
+						<td>Adiciona suporte para títulos e resumos em Português e Inglês, cria nova taxonomia para keywords em inglês e implementa o upload de imagens em lote no formulário de importação.</td>
+					</tr>
+					<tr>
 						<td style="width: 15%;"><strong>0.0.17</strong></td>
 						<td>Ajusta a coleta de acessos para incluir geolocalização (país) e implementa o shortcode <code>[mapa_acessos]</code> para exibir um mapa de distribuição geográfica dos acessos por artigo.</td>
 					</tr>

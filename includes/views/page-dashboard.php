@@ -76,6 +76,14 @@ $advanced_search_page_id = get_option( 'bjo_advanced_search_page_id', 0 );
 						<td class="text-end"><?php echo patropi_bjo_is_taxonomy_active( 'palavra-chave' ) ? '<span class="badge bg-success">Ativa</span>' : '<span class="badge bg-danger">Inativa</span>'; ?></td>
 					</tr>
 					<tr>
+						<td>Taxonomia 'keyword'</td>
+						<td class="text-end"><?php echo patropi_bjo_is_taxonomy_active( 'keyword' ) ? '<span class="badge bg-success">Ativa</span>' : '<span class="badge bg-danger">Inativa</span>'; ?></td>
+					</tr>
+					<tr>
+						<td>Taxonomia 'volume'</td>
+						<td class="text-end"><?php echo patropi_bjo_is_taxonomy_active( 'volume' ) ? '<span class="badge bg-success">Ativa</span>' : '<span class="badge bg-danger">Inativa</span>'; ?></td>
+					</tr>
+					<tr>
 						<td>Taxonomia 'tipo-do-artigo'</td>
 						<td class="text-end"><?php echo patropi_bjo_is_taxonomy_active( 'tipo-do-artigo' ) ? '<span class="badge bg-success">Ativa</span>' : '<span class="badge bg-danger">Inativa</span>'; ?></td>
 					</tr>
