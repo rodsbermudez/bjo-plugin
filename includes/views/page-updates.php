@@ -44,6 +44,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<td><strong>Mapa de Acessos</strong></td>
 						<td>Exibe um mapa geográfico interativo (GeoChart) com a distribuição dos acessos por país para cada artigo, utilizando o shortcode <code>[mapa_acessos]</code>.</td>
 					</tr>
+					<tr>
+						<td><strong>Busca Bilíngue</strong></td>
+						<td>Integração com a API do Google Translate para traduzir automaticamente termos de busca, permitindo encontrar resultados em Português e Inglês simultaneamente nos títulos e resumos.</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
@@ -57,6 +61,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<p class="lead mb-3">Acompanhe as novidades e correções de cada versão.</p> 
 			<table class="table table-hover mb-0">
 				<tbody>
+					<tr>
+						<td style="width: 15%;"><strong>0.1.1</strong></td>
+						<td>Implementação da busca bilíngue utilizando a API do Google Cloud Translation. O sistema agora traduz o termo pesquisado para PT e EN, buscando ocorrências em ambos os idiomas nos títulos e resumos. Adiciona configuração de chave de API no painel.</td>
+					</tr>
 					<tr>
 						<td style="width: 15%;"><strong>0.0.18</strong></td>
 						<td>Adiciona suporte para títulos e resumos em Português e Inglês, cria nova taxonomia para keywords em inglês e implementa o upload de imagens em lote no formulário de importação.</td>

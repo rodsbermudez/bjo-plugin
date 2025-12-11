@@ -176,13 +176,19 @@ function bjo_artigo_info_shortcode() {
         ?>
         
         <?php
-        // 6. Abstract
-        $abstract = get_field('abstract_html', $post_id);
-        if ($abstract) {
+        // 6. Abstract (PT e EN)
+        $abstract_pt = get_field('abstract_html_pt', $post_id);
+        $abstract_en = get_field('abstract_html_en', $post_id);
+        
+        if ($abstract_pt || $abstract_en) {
             echo '<div class="artigo-abstract">';
             echo '<h3>Abstract</h3>';
-            // O campo já é HTML, então usamos wp_kses_post para segurança.
-            echo wp_kses_post($abstract);
+            if ($abstract_pt) {
+                echo '<div class="abstract-pt mb-3">' . wp_kses_post($abstract_pt) . '</div>';
+            }
+            if ($abstract_en) {
+                echo '<div class="abstract-en">' . wp_kses_post($abstract_en) . '</div>';
+            }
             echo '</div>';
         }
         ?>
@@ -253,6 +259,8 @@ function bjo_filtros_artigos_shortcode() {
         'autor'           => 'Autor',           // Taxonomia customizada 'autor'
         'journal'         => 'Journal',         // Taxonomia customizada 'journal'
         'palavra-chave'   => 'Palavra-chave',   // Taxonomia nativa do WordPress para tags
+        'keyword'         => 'Keywords (EN)',   // Taxonomia para keywords em inglês
+        'volume'          => 'Volume',          // Taxonomia para volumes
         // 'tipo-do-artigo'  => 'Tipo do Artigo', // Removido/Comentado pois a taxonomia não existe
     ]; 
 
@@ -376,6 +384,13 @@ function bjo_trecho_busca_shortcode() {
 		return '';
 	}
 	$search_term = sanitize_text_field( $_GET['s_text'] );
+	 
+	// Obtém variações do termo (PT/EN) se a função estiver disponível.
+	$search_variations = [ $search_term ];
+	if ( function_exists( 'patropi_bjo_get_search_variations' ) ) {
+		$search_variations = patropi_bjo_get_search_variations( $search_term );
+	}
+
 	$output      = '';
 
 	// Pega os escopos da busca da URL para saber onde procurar o trecho.
@@ -383,16 +398,18 @@ function bjo_trecho_busca_shortcode() {
 	$selected_scopes = $_GET['search_scope'] ?? $default_scopes;
 
 	// Mapeia os campos para os rótulos que queremos exibir.
-	// A busca no título e DOI não gera trecho, mas a lógica está preparada.
+	// Atualizado para os novos campos ACF (PT/EN).
 	$available_fields = [
-		'artigo_body'   => 'no Artigo Completo',
-		'abstract_html' => 'no Resumo',
+		'artigo_body'      => 'no Artigo Completo',
+		'abstract_html_pt' => 'no Resumo (PT)',
+		'abstract_html_en' => 'no Resumo (EN)',
 		// 'post_title' e 'artigo_doi' são pesquisados, mas não geram trecho de contexto.
 	];
 
 	foreach ( $available_fields as $field_name => $label ) {
 		// Só processa o campo se ele foi parte do escopo da busca.
-		if ( ! in_array( $field_name, $selected_scopes, true ) ) {
+		$scope_to_check = ( strpos( $field_name, 'abstract_html' ) !== false ) ? 'abstract_html' : $field_name;
+		if ( ! in_array( $scope_to_check, $selected_scopes, true ) ) {
 			continue;
 		}
 
@@ -408,12 +425,19 @@ function bjo_trecho_busca_shortcode() {
 		$clean_content = preg_replace( '/\s+/', ' ', $clean_content );
 
 		// 3. Procura a primeira ocorrência do termo (case-insensitive).
-		$pos = stripos( $clean_content, $search_term );
+		$pos = false;
+		foreach ( $search_variations as $term ) {
+			$p = stripos( $clean_content, $term );
+			if ( $p !== false ) {
+				$pos = $p;
+				break;
+			}
+		}
 
 		if ( $pos !== false ) {
 			// 4. Extrai um trecho ao redor do termo encontrado.
 			$start   = max( 0, $pos - 50 ); // Pega um pouco antes.
-			$length  = strlen( $search_term ) + 100; // Pega o termo e um pouco depois.
+			$length  = 150; // Tamanho fixo para o trecho.
 			$snippet = substr( $clean_content, $start, $length );
 
 			// Adiciona "..." se o trecho não começar no início do texto.
@@ -426,11 +450,14 @@ function bjo_trecho_busca_shortcode() {
 			}
 
 			// 5. Destaca TODAS as ocorrências do termo no trecho (case-insensitive).
-			$highlighted_snippet = preg_replace(
-				'/' . preg_quote( $search_term, '/' ) . '/i',
-				'<strong>$0</strong>',
-				esc_html( $snippet )
-			);
+			$highlighted_snippet = esc_html( $snippet );
+			foreach ( $search_variations as $term ) {
+				$highlighted_snippet = preg_replace(
+					'/' . preg_quote( $term, '/' ) . '/i',
+					'<strong>$0</strong>',
+					$highlighted_snippet
+				);
+			}
 
 			// 6. Monta o HTML de saída.
 			$output .= '<p class="search-excerpt-context">';

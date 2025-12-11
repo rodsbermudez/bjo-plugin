@@ -127,6 +127,11 @@ $advanced_search_page_id = get_option( 'bjo_advanced_search_page_id', 0 );
 							<td class="text-end"><a href="<?php echo esc_url( admin_url( 'admin.php?page=patropi-bjo-configs' ) ); ?>" class="btn btn-sm btn-outline-secondary">Gerenciar</a></td>
 						</tr>
 						<tr>
+							<td>Busca Bilíngue (Google Translate)</td>
+							<td class="text-center"><?php echo get_option( 'patropi_bjo_google_translate_key' ) ? '<span class="badge bg-success">Ativa</span>' : '<span class="badge bg-danger">Inativa</span>'; ?></td>
+							<td class="text-end"><a href="<?php echo esc_url( admin_url( 'admin.php?page=patropi-bjo-configs' ) ); ?>" class="btn btn-sm btn-outline-secondary">Gerenciar</a></td>
+						</tr>
+						<tr>
 							<td>Mapa Interativo</td>
 							<td class="text-center"><?php echo shortcode_exists( 'mapa_acessos' ) ? '<span class="badge bg-success">Ativo</span>' : '<span class="badge bg-danger">Inativo</span>'; ?></td>
 							<td class="text-end"><span class="btn btn-sm btn-outline-secondary disabled" title="Visível nas páginas de artigo">N/A</span></td>
